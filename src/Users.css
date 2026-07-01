@@ -1,0 +1,244 @@
+/* MAIN LAYOUT */
+.admin-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* RIGHT CONTENT */
+.admin-content {
+  margin-top: 10px;
+     width: 79vw;
+ margin-left: 260px;
+  background: #f4f6f9;
+}
+
+/* TITLE */
+.admin-title {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* EDIT BOX */
+.edit-box {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* INPUT */
+.input-field {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* BUTTON GROUP */
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTONS */
+.btn-update {
+  background: green;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.btn-cancel {
+  background: gray;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.btn-edit {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+.btn-delete {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* TABLE */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.user-table th,
+.user-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.user-table th {
+  background: #667eea;
+  color: white;
+}
+
+/* ============================= */
+/* 📱 RESPONSIVE DESIGN */
+/* ============================= */
+
+/* TABLET (768px - 1023px) */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .admin-layout {
+    flex-direction: row;
+  }
+
+  .admin-content {
+    padding: 15px;
+  }
+
+  .admin-title {
+    font-size: 20px;
+  }
+
+  .edit-box {
+    padding: 12px;
+  }
+
+  .input-field {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .btn-edit,
+  .btn-delete {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+/* MOBILE (480px - 768px) */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .admin-content {
+    flex: 1;
+    padding: 12px;
+    width: 100%;
+  }
+
+  .admin-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .edit-box {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+
+  .input-field {
+    padding: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  .btn-group {
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .btn-update,
+  .btn-cancel {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .user-table {
+    font-size: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 8px;
+    font-size: 11px;
+  }
+
+  .btn-edit,
+  .btn-delete {
+    padding: 4px 6px;
+    margin-right: 3px;
+    font-size: 11px;
+  }
+}
+
+/* SMALL MOBILE (320px - 480px) */
+@media (max-width: 480px) {
+  .admin-content {
+  margin-left: 0;
+  overflow-x: auto;
+  }
+
+  .admin-title {
+    font-size: 16px;
+  }
+
+  .edit-box {
+    padding: 10px;
+  }
+
+  .input-field {
+    padding: 6px;
+    font-size: 13px;
+  }
+
+  .btn-group {
+    gap: 6px;
+  }
+
+  .btn-update,
+  .btn-cancel {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .user-table {
+    font-size: 11px;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 6px;
+    font-size: 10px;
+  }
+
+  .btn-edit,
+  .btn-delete {
+    padding: 3px 5px;
+    font-size: 10px;
+  }
+}

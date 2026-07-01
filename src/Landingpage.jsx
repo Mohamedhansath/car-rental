@@ -10,7 +10,7 @@ return (
 
 <div className="landing-container">
 
-<h1 className="title">Welcome To Our Portal 🚀</h1>
+<h1 className="title">Welcome To Our Portal </h1>
 
 <p className="subtitle">
 Select your role to continue
@@ -20,7 +20,7 @@ Select your role to continue
 
 <div className="card admin-card" onClick={()=>navigate("/admin-login")}>
 
-<div className="logo">🛠️</div>
+<div className="logo"></div>
 <h2>Admin</h2>
 <p>Manage the system dashboard</p>
 
@@ -28,7 +28,7 @@ Select your role to continue
 
 <div className="card user-card" onClick={()=>navigate("/user-login")}>
 
-<div className="logo">👤</div>
+<div className="logo"></div>
 <h2>User</h2>
 <p>Access your personal account</p>
 
@@ -37,7 +37,7 @@ Select your role to continue
 </div>
 
 <div className="footer-text">
-✨ Smart Management System ✨
+ Smart Management System 
 </div>
 
 </div>

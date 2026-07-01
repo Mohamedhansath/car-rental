@@ -2,13 +2,21 @@ body{
 margin:0;
 font-family:Arial;
 background:linear-gradient(135deg,#667eea,#764ba2);
-height:100vh;
-color:white;
+
+
 }
 
 .landing-container{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 text-align:center;
 padding-top:80px;
+background:linear-gradient(135deg,#667eea,#764ba2);
+
 }
 
 .title{
@@ -23,7 +31,10 @@ margin-bottom:40px;
 }
 
 .card-container{
+    
+    width: 80%;
 display:flex;
+align-items: center;
 justify-content:center;
 gap:40px;
 }

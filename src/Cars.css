@@ -1,0 +1,686 @@
+/* ROOT THEME (same as login) */
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --danger: #ef4444;
+  --shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* MAIN ROOT */
+.cars-root {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* MAIN CONTENT */
+.c-main {
+  margin-top: 10px;
+   width: 79vw;
+ margin-left: 260px;
+}
+/* TOPBAR */
+.c-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card);
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.c-breadcrumb {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.c-admin-pill {
+  background: #f1f5ff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.c-online-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+}
+
+/* HEADER */
+.c-page-header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.c-page-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+}
+
+.c-page-sub {
+  font-size: 13px;
+  color: #e0e7ff;
+}
+
+/* ADD BUTTON */
+.c-add-btn {
+  background: white;
+  color: var(--primary);
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.c-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* STATS */
+.c-stat-row {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.c-stat-pill {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: var(--shadow);
+}
+
+.c-stat-pill:hover {
+  transform: translateY(-3px);
+}
+
+.pill-active {
+  border: 2px solid var(--primary);
+}
+
+.c-stat-pill-num {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.c-stat-pill-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.c-stat-pill-bar {
+  margin-top: 6px;
+  height: 6px;
+  background: #eee;
+  border-radius: 6px;
+}
+
+.c-stat-pill-fill {
+  height: 100%;
+  border-radius: 6px;
+}
+
+/* FILTER */
+.c-filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.c-search-wrap {
+  flex: 1;
+  position: relative;
+}
+
+.c-search {
+  width: 100%;
+  padding: 10px 12px 10px 35px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+.c-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+}
+
+.c-select {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+.c-count-badge {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* TABLE */
+.c-table-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.c-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.c-table th {
+  background: #f1f5ff;
+  padding: 12px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.c-table td {
+  padding: 12px;
+  border-top: 1px solid #eee;
+}
+
+.c-car-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.c-car-emo {
+  font-size: 22px;
+}
+
+.c-car-name {
+  font-weight: 600;
+}
+
+.c-car-plate {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* BADGE */
+.c-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ACTION BUTTONS */
+.c-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.c-action-btn {
+  border: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-view {
+  background: #e0e7ff;
+}
+
+.btn-edit {
+  background: #d1fae5;
+}
+
+.btn-del {
+  background: #fee2e2;
+}
+
+/* MODAL */
+.c-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 95%;
+  animation: fadeIn 0.3s ease;
+}
+
+.c-modal-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.c-modal-title {
+  font-weight: 700;
+}
+
+.c-modal-close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.c-input, .c-fselect {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+/* BUTTONS */
+.c-btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.c-btn-cancel {
+  background: #eee;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+}
+
+.c-btn-danger {
+  background: var(--danger);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* TOAST */
+.c-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+}
+
+.toast-success {
+  background: #10b981;
+}
+
+.toast-error {
+  background: #ef4444;
+}
+
+/* ===================== */
+/* 📱 RESPONSIVE DESIGN */
+/* ===================== */
+
+/* PC (1024px and above) */
+@media (min-width: 1024px) {
+  .cars-root {
+    width: 100%;
+  }
+
+  .c-main {
+    padding: 20px;
+  }
+}
+
+/* TABLET (768px - 1023px) */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .cars-root {
+    width: 100%;
+  }
+
+  .c-main {
+    padding: 15px;
+  }
+
+  .c-page-title {
+    font-size: 22px;
+  }
+
+  .c-stat-row {
+    gap: 12px;
+  }
+
+  .c-stat-pill {
+    padding: 12px;
+  }
+
+  .c-stat-pill-num {
+    font-size: 18px;
+  }
+
+  .c-filter-row {
+    gap: 8px;
+  }
+
+  .c-table th,
+  .c-table td {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .c-car-emo {
+    font-size: 20px;
+  }
+
+  .c-modal {
+    width: 90%;
+  }
+}
+
+/* MOBILE (480px - 768px) */
+@media (max-width: 768px) {
+  .cars-root {
+    width: 100%;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  .c-main {
+    padding: 12px;
+    flex: 1;
+  }
+
+  .c-topbar {
+    padding: 12px 15px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .c-breadcrumb {
+    font-size: 14px;
+  }
+
+  .c-admin-pill {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .c-page-header {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+  }
+
+  .c-page-title {
+    font-size: 20px;
+  }
+
+  .c-page-sub {
+    font-size: 12px;
+  }
+
+  .c-add-btn {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .c-stat-row {
+    gap: 10px;
+    margin: 15px 0;
+  }
+
+  .c-stat-pill {
+    flex: 1;
+    min-width: 100px;
+    padding: 10px;
+  }
+
+  .c-stat-pill-num {
+    font-size: 16px;
+  }
+
+  .c-stat-pill-label {
+    font-size: 11px;
+  }
+
+  .c-filter-row {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .c-search-wrap {
+    width: 100%;
+  }
+
+  .c-select {
+    width: 100%;
+  }
+
+  .c-count-badge {
+    text-align: center;
+  }
+
+  .c-table-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .c-table {
+    font-size: 12px;
+    min-width: 600px;
+  }
+
+  .c-table th,
+  .c-table td {
+    padding: 10px 6px;
+    font-size: 11px;
+  }
+
+  .c-car-cell {
+    gap: 6px;
+  }
+
+  .c-car-emo {
+    font-size: 18px;
+  }
+
+  .c-car-name {
+    font-size: 12px;
+  }
+
+  .c-car-plate {
+    font-size: 10px;
+  }
+
+  .c-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .c-actions {
+    gap: 4px;
+  }
+
+  .c-action-btn {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+
+  .c-modal {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .c-modal-title {
+    font-size: 16px;
+  }
+
+  .c-input, .c-fselect {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .c-btn-primary,
+  .c-btn-cancel,
+  .c-btn-danger {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .c-toast {
+    bottom: 15px;
+    right: 15px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}
+
+/* SMALL MOBILE (< 480px) */
+@media (max-width: 480px) {
+  .c-main {
+    width: 100%;
+    padding: 10px;
+    margin-left: 0;
+  }
+
+  .c-topbar {
+    padding: 10px 12px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .c-breadcrumb {
+    font-size: 13px;
+  }
+
+  .c-admin-pill {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .c-page-header {
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .c-page-title {
+    font-size: 18px;
+  }
+
+  .c-add-btn {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .c-stat-row {
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .c-stat-pill {
+    min-width: 80px;
+    padding: 8px;
+  }
+
+  .c-stat-pill-num {
+    font-size: 14px;
+  }
+
+  .c-filter-row {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .c-search {
+    font-size: 12px;
+    padding: 8px 10px 8px 30px;
+  }
+
+  .c-select {
+    font-size: 12px;
+  }
+
+  .c-table {
+    min-width: 500px;
+    font-size: 10px;
+  }
+
+  .c-table th,
+  .c-table td {
+    padding: 8px 4px;
+    font-size: 10px;
+  }
+
+  .c-car-emo {
+    font-size: 16px;
+  }
+
+  .c-actions {
+    gap: 3px;
+  }
+
+  .c-action-btn {
+    padding: 4px 5px;
+    font-size: 9px;
+  }
+
+  .c-modal {
+    width: 98%;
+    padding: 12px;
+  }
+
+  .c-modal-title {
+    font-size: 14px;
+  }
+
+  .c-input, .c-fselect {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .c-btn-primary,
+  .c-btn-cancel,
+  .c-btn-danger {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .c-toast {
+    bottom: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+}

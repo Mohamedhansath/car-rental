@@ -1,0 +1,344 @@
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        :root{
+          --bg:#f5f3ff;--surface:#fff;--border:#ede9fe;
+          --text:#1e1b4b;--muted:#6b7280;--purple:#7c3aed;--blue:#2563eb;
+          --grad:linear-gradient(135deg,#7c3aed,#2563eb);
+          --grad-bg:linear-gradient(135deg,#1e1b4b 0%,#312e81 55%,#1d4ed8 100%);
+        }
+        body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);}
+
+        .pf-nav{height:64px;background:rgba(30,27,75,0.97);backdrop-filter:blur(12px);
+          border-bottom:1px solid rgba(167,139,250,0.15);
+          display:flex;align-items:center;justify-content:space-between;
+          padding:0 40px;position:sticky;top:0;z-index:100;}
+        .pf-brand{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+          background:linear-gradient(90deg,#c4b5fd,#93c5fd);
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
+        .pf-back{display:flex;align-items:center;gap:6px;padding:8px 16px;
+          border-radius:10px;background:rgba(255,255,255,0.08);
+          border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);
+          font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;
+          font-family:'Plus Jakarta Sans',sans-serif;}
+        .pf-back:hover{background:rgba(255,255,255,0.15);color:#fff;}
+
+        .pf-hero{background:var(--grad-bg);padding:48px 40px;position:relative;overflow:hidden;}
+        .pf-hero::before{content:'';position:absolute;width:500px;height:500px;
+          background:radial-gradient(circle,rgba(124,58,237,0.25) 0%,transparent 65%);
+          bottom:-150px;right:-80px;pointer-events:none;}
+        .pf-hero-inner{display:flex;align-items:center;gap:24px;position:relative;z-index:1;max-width:700px;margin:0 auto;}
+        .pf-avatar{
+          width:88px;height:88px;border-radius:22px;flex-shrink:0;
+          background:linear-gradient(135deg,#a78bfa,#60a5fa);
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;
+          border:3px solid rgba(255,255,255,0.25);
+          box-shadow:0 8px 24px rgba(0,0,0,0.25);
+        }
+        
+        .pf-hero-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.3px;}
+        .pf-hero-email{font-size:14px;color:rgba(255,255,255,0.6);margin-top:4px;}
+        .pf-hero-stats{display:flex;gap:24px;margin-top:14px;}
+        .pf-hstat{text-align:left;}
+        .pf-hstat-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;}
+        .pf-hstat-label{font-size:11px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;}
+
+        .pf-main{max-width:700px;margin:0 auto;padding:32px 24px;}
+
+        /* QUICK ACTIONS */
+        .pf-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+        .pf-action-btn{
+          background:var(--surface);border:1px solid var(--border);border-radius:14px;
+          padding:16px;cursor:pointer;text-align:center;transition:all 0.15s;
+          font-family:'Plus Jakarta Sans',sans-serif;
+        }
+        .pf-action-btn:hover{border-color:var(--purple);box-shadow:0 4px 16px rgba(124,58,237,0.1);transform:translateY(-2px);}
+        .pf-action-icon{font-size:26px;margin-bottom:6px;}
+        .pf-action-label{font-size:13px;font-weight:700;color:var(--purple);}
+
+        /* FORM CARD */
+        .pf-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+          overflow:hidden;box-shadow:0 4px 24px rgba(124,58,237,0.07);}
+        .pf-card-header{
+          padding:20px 24px;
+          background:linear-gradient(90deg,#faf5ff,#eff6ff);
+          border-bottom:1px solid var(--border);
+          display:flex;align-items:center;justify-content:space-between;
+        }
+        .pf-card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--purple);}
+        .pf-edit-btn{
+          padding:8px 18px;border-radius:9px;
+          background:var(--grad);border:none;color:#fff;
+          font-size:13px;font-weight:700;cursor:pointer;
+          font-family:'Plus Jakarta Sans',sans-serif;
+          box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:all 0.15s;
+        }
+        .pf-edit-btn:hover{transform:translateY(-1px);}
+        .pf-edit-btn.cancel{background:#f5f3ff;color:var(--purple);box-shadow:none;border:1.5px solid #ede9fe;}
+        .pf-edit-btn.cancel:hover{background:#ede9fe;}
+
+        .pf-form{padding:24px;display:grid;gap:16px;}
+        .pf-frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+        .pf-fg{display:flex;flex-direction:column;gap:6px;}
+        .pf-lbl{font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.5px;}
+        .pf-inp{
+          padding:11px 14px;background:#faf5ff;
+          border:1.5px solid #ede9fe;border-radius:10px;
+          color:var(--text);font-size:14px;font-weight:500;
+          font-family:'Plus Jakarta Sans',sans-serif;outline:none;
+          transition:border-color .15s,box-shadow .15s;
+        }
+        .pf-inp:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.1);}
+        .pf-inp:disabled{background:#f9f9f9;color:#9ca3af;cursor:not-allowed;}
+        .pf-inp::placeholder{color:#c4b5fd;}
+        .pf-pw-wrap{position:relative;}
+        .pf-pw-wrap .pf-inp{width:100%;}
+        .pf-pw-toggle{
+          position:absolute;right:12px;top:50%;transform:translateY(-50%);
+          background:none;border:none;cursor:pointer;font-size:16px;color:#9ca3af;
+        }
+
+        .pf-save-btn{
+          width:100%;padding:13px;border-radius:12px;border:none;
+          background:var(--grad);color:#fff;font-size:15px;font-weight:800;cursor:pointer;
+          font-family:'Plus Jakarta Sans',sans-serif;
+          box-shadow:0 6px 22px rgba(124,58,237,0.35);
+          transition:all 0.2s;margin-top:4px;
+        }
+        .pf-save-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(124,58,237,0.45);}
+
+        /* DANGER ZONE */
+        .pf-danger{
+          margin-top:20px;background:var(--surface);border:1px solid #fecdd3;
+          border-radius:16px;overflow:hidden;
+        }
+        .pf-danger-header{
+          padding:16px 20px;background:#fff1f2;border-bottom:1px solid #fecdd3;
+          font-size:13px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:0.5px;
+        }
+        .pf-danger-body{padding:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+        .pf-danger-text{font-size:14px;color:var(--muted);}
+        .pf-logout-btn{
+          padding:10px 22px;border-radius:10px;
+          background:#fff1f2;border:1.5px solid #fecdd3;
+          color:#ef4444;font-size:14px;font-weight:700;cursor:pointer;
+          font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.15s;white-space:nowrap;
+        }
+        .pf-logout-btn:hover{background:#fee2e2;}
+
+        .ud-toast{position:fixed;bottom:28px;right:28px;padding:14px 22px;border-radius:14px;
+          font-size:14px;font-weight:700;display:flex;align-items:center;gap:10px;
+          z-index:999;animation:toastIn .3s ease;box-shadow:0 8px 32px rgba(124,58,237,0.3);}
+        @keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+        .t-success{background:var(--grad);color:#fff;}
+
+        /* ===================== */
+        /* 📱 RESPONSIVE DESIGN */
+        /* ===================== */
+
+        /* TABLET (768px - 1024px) */
+        @media(max-width:1024px){
+          .pf-nav{padding:0 30px;}
+          .pf-hero{padding:40px 30px;}
+          .pf-hero-inner{gap:20px;}
+          .pf-avatar{width:76px;height:76px;font-size:24px;}
+          .pf-hero-name{font-size:24px;}
+          .pf-hero-stats{gap:20px;}
+          .pf-main{padding:28px 20px;max-width:100%;}
+          .pf-actions{grid-template-columns:repeat(3,1fr);gap:12px;}
+          .pf-frow{gap:12px;}
+          .pf-inp{padding:10px 12px;font-size:13px;}
+        }
+
+        /* MOBILE (480px - 768px) */
+        @media(max-width:768px){
+          .pf-nav{
+            padding:0 20px;
+            height:56px;
+          }
+          .pf-brand{font-size:18px;}
+          .pf-back{
+            padding:6px 12px;
+            font-size:12px;
+          }
+          .pf-hero{
+            padding:32px 20px;
+          }
+          .pf-hero::before{
+            width:300px;
+            height:300px;
+            bottom:-80px;
+            right:-60px;
+          }
+          .pf-hero-inner{
+            flex-direction:column;
+            text-align:center;
+            gap:16px;
+          }
+          .pf-avatar{
+            width:72px;
+            height:72px;
+            font-size:22px;
+            border:2px solid rgba(255,255,255,0.2);
+          }
+          .pf-hero-name{
+            font-size:22px;
+            margin-bottom:4px;
+          }
+          .pf-hero-email{font-size:12px;}
+          .pf-hero-stats{
+            justify-content:center;
+            gap:16px;
+            flex-wrap:wrap;
+          }
+          .pf-hstat-num{font-size:18px;}
+          .pf-hstat-label{font-size:10px;}
+          .pf-main{
+            padding:20px 16px;
+            max-width:100%;
+          }
+          .pf-actions{
+            grid-template-columns:repeat(2,1fr);
+            gap:10px;
+            margin-bottom:20px;
+          }
+          .pf-action-btn{
+            padding:12px;
+            border-radius:12px;
+          }
+          .pf-action-icon{font-size:22px;margin-bottom:4px;}
+          .pf-action-label{font-size:11px;}
+          .pf-card{border-radius:16px;}
+          .pf-card-header{
+            padding:16px 20px;
+            flex-direction:column;
+            align-items:flex-start;
+            gap:12px;
+          }
+          .pf-card-title{font-size:18px;}
+          .pf-edit-btn{
+            padding:7px 16px;
+            font-size:12px;
+            width:100%;
+          }
+          .pf-form{
+            padding:20px;
+            gap:14px;
+          }
+          .pf-frow{
+            grid-template-columns:1fr;
+            gap:12px;
+          }
+          .pf-fg{gap:5px;}
+          .pf-lbl{font-size:10px;}
+          .pf-inp{
+            padding:10px 12px;
+            font-size:13px;
+            border-radius:8px;
+          }
+          .pf-save-btn{
+            padding:11px;
+            font-size:14px;
+            margin-top:2px;
+          }
+          .pf-danger{margin-top:16px;border-radius:12px;}
+          .pf-danger-header{
+            padding:12px 16px;
+            font-size:11px;
+          }
+          .pf-danger-body{
+            padding:16px;
+            flex-direction:column;
+            align-items:stretch;
+            gap:12px;
+          }
+          .pf-danger-text{font-size:12px;}
+          .pf-logout-btn{
+            padding:10px 16px;
+            font-size:12px;
+            width:100%;
+          }
+          .ud-toast{
+            bottom:20px;
+            right:20px;
+            padding:12px 18px;
+            font-size:12px;
+          }
+        }
+
+        /* SMALL MOBILE (< 480px) */
+        @media(max-width:480px){
+          .pf-nav{
+            padding:0 15px;
+            height:52px;
+          }
+          .pf-brand{font-size:16px;}
+          .pf-back{
+            padding:5px 10px;
+            font-size:11px;
+          }
+          .pf-hero{
+            padding:24px 15px;
+          }
+          .pf-hero::before{
+            width:200px;
+            height:200px;
+          }
+          .pf-hero-inner{gap:12px;}
+          .pf-avatar{
+            width:60px;
+            height:60px;
+            font-size:18px;
+          }
+          .pf-hero-name{
+            font-size:18px;
+          }
+          .pf-hero-email{font-size:11px;}
+          .pf-hero-stats{gap:12px;}
+          .pf-hstat-num{font-size:16px;}
+          .pf-hstat-label{font-size:9px;}
+          .pf-main{
+            padding:16px 12px;
+          }
+          .pf-actions{
+            grid-template-columns:1fr;
+            gap:8px;
+            margin-bottom:16px;
+          }
+          .pf-action-btn{
+            padding:10px;
+          }
+          .pf-action-icon{font-size:20px;}
+          .pf-action-label{font-size:10px;}
+          .pf-card-header{
+            padding:12px 16px;
+          }
+          .pf-card-title{font-size:16px;}
+          .pf-form{
+            padding:16px;
+            gap:12px;
+          }
+          .pf-frow{gap:10px;}
+          .pf-lbl{font-size:9px;}
+          .pf-inp{
+            padding:8px 10px;
+            font-size:12px;
+          }
+          .pf-save-btn{
+            padding:10px;
+            font-size:12px;
+          }
+          .pf-danger-body{
+            padding:12px;
+          }
+          .pf-danger-text{font-size:11px;}
+          .pf-logout-btn{
+            padding:9px 14px;
+            font-size:11px;
+          }
+          .ud-toast{
+            bottom:15px;
+            right:15px;
+            padding:10px 14px;
+            font-size:11px;
+          }
+        }

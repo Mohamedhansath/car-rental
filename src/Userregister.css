@@ -1,0 +1,151 @@
+
+
+:root{
+  --bg: #f5f7fb;
+  --card-bg: #ffffff;
+  --primary: #2563eb; 
+  --primary-dark: #1e40af; 
+  --muted: #6b7280; 
+  --accent: #10b981;
+  --shadow: 0 10px 25px rgba(16,24,40,0.08);
+}
+
+.userregister-page{
+   min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 100%);
+  padding: 48px 16px;
+ border-radius: 150px 20px 150px 20px;
+ 
+}
+
+.userregister-card{
+  width: 100%;
+  max-width: 420px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 28px;
+  box-sizing: border-box;
+  border: 1px solid rgba(15,23,42,0.03);
+}
+
+.userregister-brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.userregister-brand-logo{
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.userregister-title{
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a; /* slate-900 */
+}
+
+.userregister-subtitle{
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.userregister-form{
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.userregister-field{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.userregister-label{
+  font-size: 13px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.userregister-input{
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6edf8;
+  background: #fbfdff;
+  outline: none;
+  font-size: 14px;
+  color: #0f172a;
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+
+.userregister-input:focus{
+  border-color: var(--primary);
+  box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+}
+
+.userregister-actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.userregister-submit{
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color .12s ease, transform .06s ease;
+}
+
+.userregister-submit:hover{
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.userregister-back{
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.06);
+  background: transparent;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.userregister-back:hover{
+  background: rgba(15,23,42,0.04);
+}
+
+/* Responsive */
+@media (max-width: 480px){
+  .userregister-card{
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .userregister-brand-logo{
+    width: 42px;
+    height: 42px;
+    font-size: 16px;
+  }
+}
