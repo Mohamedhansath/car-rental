@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import "./Cars.css";
-
-const API = "http://localhost:8000";
+import { getCars, addCar, updateCar, deleteCar } from "./localData";
 
 const EMPTY_CAR = {
   name: "", brand: "", type: "Sedan", fuel: "Petrol",
@@ -27,13 +26,9 @@ export default function Cars() {
 
   useEffect(() => { fetchCars(); }, []);
 
-  const fetchCars = async () => {
+  const fetchCars = () => {
     setLoading(true);
-    try {
-      const res  = await fetch(`${API}/api/cars`);
-      const data = await res.json();
-      setCars(Array.isArray(data) ? data : []);
-    } catch { setCars([]); }
+    setCars(getCars());
     setLoading(false);
   };
 
@@ -43,70 +38,57 @@ export default function Cars() {
   };
 
   /* ── Add car ── */
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (!form.name.trim()) { flash("Car name is required ❌", "error"); return; }
     setSaving(true);
-    try {
-      const payload = {
-        ...form,
-        seats:    Number(form.seats),
-        price:    Number(form.price),
-        year:     Number(form.year),
-        reviews:  Number(form.reviews),
-        rating:   Number(form.rating),
-        available: form.status === "Available",
-        features: typeof form.features === "string" ? form.features : form.features.join(","),
-      };
-      const res = await fetch(`${API}/api/cars`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("Add failed");
-      await fetchCars();
-      setModal(null);
-      flash("Car added successfully ✅");
-    } catch { flash("Add failed ❌", "error"); }
+
+    const payload = {
+      ...form,
+      seats:    Number(form.seats),
+      price:    Number(form.price),
+      year:     Number(form.year),
+      reviews:  Number(form.reviews),
+      rating:   Number(form.rating),
+      available: form.status === "Available",
+      features: typeof form.features === "string" ? form.features : form.features.join(","),
+    };
+
+    addCar(payload);
+    fetchCars();
+    setModal(null);
+    flash("Car added successfully ✅");
     setSaving(false);
   };
 
   /* ── Edit car ── */
-  const handleEdit = async () => {
+  const handleEdit = () => {
     if (!form.name.trim()) { flash("Car name is required ❌", "error"); return; }
     setSaving(true);
-    try {
-      const payload = {
-        ...form,
-        seats:    Number(form.seats),
-        price:    Number(form.price),
-        year:     Number(form.year),
-        reviews:  Number(form.reviews),
-        rating:   Number(form.rating),
-        available: form.status === "Available",
-        features: Array.isArray(form.features) ? form.features.join(",") : form.features,
-      };
-      const res = await fetch(`${API}/api/cars/${form.id}`, {
-        method:  "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("Edit failed");
-      await fetchCars();
-      setModal(null);
-      flash("Car updated successfully ✅");
-    } catch { flash("Edit failed ❌", "error"); }
+
+    const payload = {
+      ...form,
+      seats:    Number(form.seats),
+      price:    Number(form.price),
+      year:     Number(form.year),
+      reviews:  Number(form.reviews),
+      rating:   Number(form.rating),
+      available: form.status === "Available",
+      features: Array.isArray(form.features) ? form.features.join(",") : form.features,
+    };
+
+    updateCar(form.id, payload);
+    fetchCars();
+    setModal(null);
+    flash("Car updated successfully ✅");
     setSaving(false);
   };
 
   /* ── Delete car ── */
-  const handleDelete = async (carId) => {
-    try {
-      const res = await fetch(`${API}/api/cars/${carId}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Delete failed");
-      setCars(prev => prev.filter(c => c.id !== carId));
-      setModal(null);
-      flash("Car deleted ✅");
-    } catch { flash("Delete failed ❌", "error"); }
+  const handleDelete = (carId) => {
+    deleteCar(carId);
+    setCars(prev => prev.filter(c => c.id !== carId));
+    setModal(null);
+    flash("Car deleted ✅");
   };
 
   /* ── Filter ── */

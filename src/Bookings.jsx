@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import "./Bookings.css";
-
-const API = "http://localhost:8000";
+import { getBookings, updateBookingStatus, deleteBooking } from "./localData";
 
 const STATUS_COLORS = {
   Booked:    { bg: "#e0e7ff", color: "#4338ca" },
@@ -26,15 +25,9 @@ export default function Bookings() {
   /* ── Load bookings ── */
   useEffect(() => { fetchBookings(); }, []);
 
-  const fetchBookings = async () => {
+  const fetchBookings = () => {
     setLoading(true);
-    try {
-      const res  = await fetch(`${API}/api/bookings`);
-      const data = await res.json();
-      setBookings(Array.isArray(data) ? data : []);
-    } catch {
-      setBookings([]);
-    }
+    setBookings(getBookings());
     setLoading(false);
   };
 
@@ -44,32 +37,18 @@ export default function Bookings() {
   };
 
   /* ── Status change ── */
-  const handleStatusChange = async (bookingId, newStatus) => {
-    try {
-      const res = await fetch(`${API}/api/bookings/${bookingId}`, {
-        method:  "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (!res.ok) throw new Error("Status update failed");
-      setBookings(prev => prev.map(b => b.id == bookingId ? { ...b, status: newStatus } : b));
-      flash("Status updated ✅");
-    } catch {
-      flash("Update failed ❌", "error");
-    }
+  const handleStatusChange = (bookingId, newStatus) => {
+    updateBookingStatus(bookingId, newStatus);
+    setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: newStatus } : b));
+    flash("Status updated ✅");
   };
 
   /* ── Delete booking ── */
-  const handleDelete = async (bookingId) => {
-    try {
-      const res = await fetch(`${API}/api/bookings/${bookingId}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Delete failed");
-      setBookings(prev => prev.filter(b => b.id != bookingId));
-      setModal(null);
-      flash("Booking deleted ✅");
-    } catch {
-      flash("Delete failed ❌", "error");
-    }
+  const handleDelete = (bookingId) => {
+    deleteBooking(bookingId);
+    setBookings(prev => prev.filter(b => b.id !== bookingId));
+    setModal(null);
+    flash("Booking deleted ✅");
   };
 
   /* ── Filter ── */

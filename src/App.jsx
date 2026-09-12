@@ -34,7 +34,7 @@ function App() {
      <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/admin-Login" element={<Login />} />
+        <Route path="/admin-login" element={<Login />} />
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/cars" element={<Cars/>} />
@@ -43,12 +43,10 @@ function App() {
         <Route path="/userLogin" element={<UserLogin/>} />
         <Route path="/userRegister" element={<Userregister/>} />
         <Route path="/userforgotpassword" element={<Userforgotpassword/>} />
-       
-
         <Route path="/userDashboard" element={<UserDashboard/>}/>
-<Route path="/car" element={<CarDetails/>}/>
-<Route path="/bookings" element={<MyBookings/>}/>
-<Route path="/profile" element={<Profile/>}/>
+        <Route path="/car" element={<CarDetails/>}/>
+        <Route path="/bookings" element={<MyBookings/>}/>
+        <Route path="/profile" element={<Profile/>}/>
 
         
       </Routes>

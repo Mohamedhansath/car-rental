@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import "./Dashboard.css";
-
-const API = "http://localhost:8000";
+import { getBookings, getCars } from "./localData";
 
 const navItems = [
   { label: "Dashboard",  path: "/dashboard" },
@@ -22,67 +21,46 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadData = () => {
       setLoading(true);
-      try {
-        // Fetch bookings
-        const bookingsRes = await fetch(`${API}/api/bookings`);
-        const bookingsData = bookingsRes.ok ? await bookingsRes.json() : [];
-        const bookings = Array.isArray(bookingsData) ? bookingsData : [];
 
-        // Fetch cars
-        const carsRes = await fetch(`${API}/api/cars`);
-        const carsData = carsRes.ok ? await carsRes.json() : [];
-        const carsList = Array.isArray(carsData) ? carsData.map(c => ({
-          ...c,
-          price: `₹${Number(c.price || 0).toLocaleString("en-IN")}/day`,
-          rating: c.rating || 4.5,
-        })) : [];
+      const bookings = getBookings();
+      const carsList = getCars().map((c) => ({
+        ...c,
+        price: `₹${Number(c.price || 0).toLocaleString("en-IN")}/day`,
+        rating: c.rating || 4.5,
+      }));
 
-        setCars(carsList);
+      setCars(carsList);
 
-        // Process recent bookings
-        const sortedBookings = [...bookings].sort((a,b) => (b.createdAt||"").localeCompare(a.createdAt||"")).slice(0,5);
-        setRecentBookings(sortedBookings.map(b => ({
-          id: b.id,
-          customer: b.customer || b.carName || "Guest",
-          car: b.car || b.carName || "Car",
-          date: b.createdAt || b.date || "—",
-          amount: "₹" + Number(b.amount || b.price || 0).toLocaleString("en-IN"),
-          status: b.status || "Pending",
-        })));
+      const sortedBookings = [...bookings]
+        .sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""))
+        .slice(0, 5);
 
-        // Calculate stats
-        const totalCars = carsList.length;
-        const activeBookings = bookings.filter(b => b.status === "Active").length;
-        const revenue = bookings.filter(b => b.status !== "Cancelled").reduce((sum, b) => sum + Number(b.amount || b.price || 0), 0);
-        const availableCars = carsList.filter(c => c.status === "Available").length;
+      setRecentBookings(sortedBookings.map((b) => ({
+        id: b.id,
+        customer: b.customer || b.carName || "Guest",
+        car: b.carName || "Car",
+        date: b.createdAt || b.date || "—",
+        amount: "₹" + Number(b.amount || b.price || 0).toLocaleString("en-IN"),
+        status: b.status || "Pending",
+      })));
 
-        setStats([
-          { label: "Total Cars", value: totalCars.toString(), change: "+4 this month", color: "#f97316" },
-          { label: "Active Bookings", value: activeBookings.toString(), change: "+8 today", color: "#06b6d4" },
-          { label: "Revenue", value: `₹${(revenue / 100000).toFixed(1)}L`, change: "+12% vs last month", color: "#10b981" },
-          { label: "Available Cars", value: availableCars.toString(), change: `${((availableCars / totalCars) * 100).toFixed(0)}% fleet free`, color: "#8b5cf6" },
-        ]);
-      } catch (error) {
-        console.error("Failed to load data:", error);
-        // Fallback to static data if needed
-        setStats([
-          { label: "Total Cars", value: "48", change: "+4 this month", color: "#f97316" },
-          { label: "Active Bookings", value: "23", change: "+8 today", color: "#06b6d4" },
-          { label: "Revenue", value: "₹1.2L", change: "+12% vs last month", color: "#10b981" },
-          { label: "Available Cars", value: "25", change: "52% fleet free", color: "#8b5cf6" },
-        ]);
-        setCars([
-          { name: "Toyota Innova", type: "MUV", status: "Rented", price: "₹1,500/day", rating: "4.8" },
-          { name: "Honda City", type: "Sedan", status: "Available", price: "₹900/day", rating: "4.6" },
-          { name: "Maruti Swift", type: "Hatchback", status: "Available", price: "₹500/day", rating: "4.5" },
-          { name: "Hyundai Creta", type: "SUV", status: "Rented", price: "₹1,100/day", rating: "4.7" },
-          { name: "Tata Nexon", type: "SUV", status: "Maintenance", price: "₹950/day", rating: "4.4" },
-        ]);
-      }
+      const totalCars = carsList.length;
+      const activeBookings = bookings.filter((b) => b.status === "Active" || b.status === "Booked").length;
+      const revenue = bookings.filter((b) => b.status !== "Cancelled").reduce((sum, b) => sum + Number(b.amount || b.price || 0), 0);
+      const availableCars = carsList.filter((c) => c.status === "Available").length;
+
+      setStats([
+        { label: "Total Cars", value: totalCars.toString(), change: "+4 this month", color: "#f97316" },
+        { label: "Active Bookings", value: activeBookings.toString(), change: "+8 today", color: "#06b6d4" },
+        { label: "Revenue", value: `₹${(revenue / 100000).toFixed(1)}L`, change: "+12% vs last month", color: "#10b981" },
+        { label: "Available Cars", value: availableCars.toString(), change: `${((availableCars / totalCars) * 100).toFixed(0)}% fleet free`, color: "#8b5cf6" },
+      ]);
+
       setLoading(false);
     };
+
     loadData();
   }, []);
 

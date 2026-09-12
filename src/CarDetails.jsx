@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./CarDetails.css";
-
-const API = "http://localhost:8000";
+import { addBooking, getBookingsByUser, getCarById } from "./localData";
 
 export default function CarDetails() {
   const navigate  = useNavigate();
@@ -21,13 +20,9 @@ export default function CarDetails() {
   useEffect(() => {
     if (!id) { setLoadingCar(false); return; }
 
-    fetch(`${API}/api/cars/${id}`)
-      .then(r => {
-        if (!r.ok) throw new Error("Car not found");
-        return r.json();
-      })
-      .then(data => { setCar(data); setLoadingCar(false); })
-      .catch(() => setLoadingCar(false));
+    const data = getCarById(id);
+    setCar(data || null);
+    setLoadingCar(false);
   }, [id]);
 
   /* ── Check if user already booked this car ── */
@@ -36,14 +31,8 @@ export default function CarDetails() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return;
 
-    fetch(`${API}/api/my-bookings/${user.id}`)
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setBooked(data.some(b => b.carId === car.id && b.status === "Booked"));
-        }
-      })
-      .catch(() => {});
+    const data = getBookingsByUser(user.id);
+    setBooked(data.some((b) => b.carId === car.id && (b.status === "Booked" || b.status === "Active")));
   }, [car]);
 
   const flash = (msg) => {
@@ -52,32 +41,17 @@ export default function CarDetails() {
   };
 
   /* ── Book car ── */
-  const handleBook = async () => {
+  const handleBook = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) { navigate("/userLogin"); return; }
     if (!car || !car.available) return;
 
     setLoading(true);
-    try {
-      const res = await fetch(`${API}/api/bookings`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user.id,
-          carId:  car.id,
-          days:   days,
-        }),
-      });
+    addBooking({ userId: user.id, carId: car.id, days });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Booking failed");
-
-      setBooked(true);
-      setCar(prev => prev ? { ...prev, available: false } : prev);
-      flash(`${car.name} booked for ${days} day${days > 1 ? "s" : ""}! 🎉`);
-    } catch (err) {
-      flash(err.message || "Booking failed ❌");
-    }
+    setBooked(true);
+    setCar((prev) => prev ? { ...prev, available: false, status: "Rented" } : prev);
+    flash(`${car.name} booked for ${days} day${days > 1 ? "s" : ""}! 🎉`);
     setLoading(false);
   };
 

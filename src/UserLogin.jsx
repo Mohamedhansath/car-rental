@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
+import { getUserByEmail } from "./localData";
 
 function UserLogin() {
   const navigate = useNavigate();
@@ -12,35 +13,22 @@ function UserLogin() {
   const handleRegister = () => navigate("/userRegister");
   const handleForgotPassword = () => navigate("/userforgotpassword");
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    try {
-      // ✅ Changed GET → POST (credentials must go in body, not URL)
-      const response = await fetch("http://127.0.0.1:8000/users/login1", {
-        method: "POST",                               // ✅ GET இல்ல POST!
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),    // ✅ body-ல credentials
-      });
+    const user = getUserByEmail(email);
 
-      const data = await response.json();
-
-      
-      if (response.ok) {
-        // Save user info to localStorage
-        localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/userDashboard");
-      } else {
-        setError(data.detail || "Invalid email or password");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Unable to connect to server. Please try again.");
-    } finally {
+    if (!user || user.password !== password) {
+      setError("Invalid email or password");
       setLoading(false);
+      return;
     }
+
+    localStorage.setItem("user", JSON.stringify(user));
+    navigate("/userDashboard");
+    setLoading(false);
   };
 
   return (

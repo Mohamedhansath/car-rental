@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./UserDashboard.css";
-
-const API = "http://localhost:8000";
+import { addBooking, getBookingsByUser, getCars } from "./localData";
 const FUEL_ICON = { Petrol: "", Diesel: "", Electric: "", Hybrid: "" };
 
 export default function UserDashboard() {
@@ -25,27 +24,20 @@ export default function UserDashboard() {
     loadMyBookings(saved.id);
   }, []);
 
-  const loadCars = async () => {
-    try {
-      const res  = await fetch(`${API}/api/cars`);
-      const data = await res.json();
-      setCars(Array.isArray(data) ? data : []);
-    } catch {
-      setCars([]);
-    }
+  const loadCars = () => {
+    setCars(getCars());
   };
 
   /* Mark already-booked cars so card shows "Booked" immediately */
-  const loadMyBookings = async (userId) => {
-    try {
-      const res  = await fetch(`${API}/api/my-bookings/${userId}`);
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        const map = {};
-        data.filter(b => b.status === "Booked").forEach(b => { map[b.carId] = true; });
-        setBooked(map);
-      }
-    } catch { /* ignore */ }
+  const loadMyBookings = (userId) => {
+    const bookings = getBookingsByUser(userId);
+    const map = {};
+
+    bookings.filter((b) => b.status === "Booked" || b.status === "Active").forEach((b) => {
+      map[b.carId] = true;
+    });
+
+    setBooked(map);
   };
 
   const flash = (msg) => {
@@ -54,31 +46,16 @@ export default function UserDashboard() {
   };
 
   /* ── Book a car ── */
-  const handleBook = async (car) => {
+  const handleBook = (car) => {
     if (!user) { navigate("/userLogin"); return; }
-    if (!car.available || booked[car.id]) { flash("Car is not available "); return; }
+    if (!car.available || booked[car.id]) { flash("Car is not available"); return; }
 
     setLoading(car.id);
-    try {
-      const res = await fetch(`${API}/api/bookings`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user.id,
-          carId:  car.id,
-          days:   1,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Booking failed");
+    addBooking({ userId: user.id, carId: car.id, days: 1 });
 
-      /* Update UI immediately — no page reload needed */
-      setBooked(prev => ({ ...prev, [car.id]: true }));
-      setCars(prev => prev.map(c => c.id === car.id ? { ...c, available: false } : c));
-      flash(`${car.name} booked successfully! `);
-    } catch (err) {
-      flash(err.message || "Booking failed ");
-    }
+    setBooked(prev => ({ ...prev, [car.id]: true }));
+    setCars(prev => prev.map(c => c.id === car.id ? { ...c, available: false, status: "Rented" } : c));
+    flash(`${car.name} booked successfully!`);
     setLoading(null);
   };
 

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Userregister.css";
-
-const API_BASE = "http://localhost:8000";
+import { addUser, getUserByEmail } from "./localData";
 
 function Userregister() {
   const navigate = useNavigate();
@@ -14,28 +13,27 @@ function Userregister() {
   const [message,  setMessage]  = useState(null);
   const [loading,  setLoading]  = useState(false);
 
-  const handleRegister = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-    try {
-      const response = await fetch(`${API_BASE}/users/registration1`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ name, email, password, phone, city }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMessage({ type: "success", text: "Registration successful — redirecting to login..." });
-        setTimeout(() => navigate("/userLogin"), 1500);
-      } else {
-        setMessage({ type: "error", text: data.detail || "Registration failed. Please try again." });
-      }
-    } catch {
-      setMessage({ type: "error", text: "Unable to connect to server. Please try again." });
-    } finally {
+
+    if (!name || !email || !password) {
+      setMessage({ type: "error", text: "Please fill in the required fields." });
       setLoading(false);
+      return;
     }
+
+    if (getUserByEmail(email)) {
+      setMessage({ type: "error", text: "This email is already registered." });
+      setLoading(false);
+      return;
+    }
+
+    addUser({ name, email, password, phone, city, role: "user" });
+    setMessage({ type: "success", text: "Registration successful — redirecting to login..." });
+    setTimeout(() => navigate("/userLogin"), 1500);
+    setLoading(false);
   };
 
   return (

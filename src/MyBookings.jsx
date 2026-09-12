@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MyBookings.css";
-
-const API = "http://localhost:8000";
+import { cancelBooking, getBookingsByUser } from "./localData";
 
 const STATUS_META = {
   Booked:    { bg: "rgba(124,58,237,0.1)",  color: "#7c3aed", label: "Booked" },
@@ -28,18 +27,9 @@ export default function MyBookings() {
     fetchBookings(user.id);
   }, []);
 
-  const fetchBookings = async (userId) => {
+  const fetchBookings = (userId) => {
     setLoading(true);
-    try {
-      const res = await fetch(`${API}/api/my-bookings/${userId}`);
-      if (!res.ok) throw new Error("Failed to load bookings");
-      const data = await res.json();
-      setBookings(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Error fetching bookings:", err);
-      setBookings([]);
-      flash("Failed to load bookings ❌");
-    }
+    setBookings(getBookingsByUser(userId));
     setLoading(false);
   };
 
@@ -49,20 +39,11 @@ export default function MyBookings() {
   };
 
   /* ── Cancel booking ── */
-  const cancelBooking = async (id) => {
-    try {
-      const res = await fetch(`${API}/api/bookings/${id}/cancel`, { method: "PATCH" });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || "Cancel failed");
-      }
-      /* Update local state — no need to refetch */
-      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: "Cancelled" } : b));
-      flash("Booking cancelled successfully ✅");
-      setConfirmCancel(null);
-    } catch (err) {
-      flash(err.message || "Cancel failed ❌");
-    }
+  const handleCancelBooking = (id) => {
+    cancelBooking(id);
+    setBookings(prev => prev.map(b => b.id === id ? { ...b, status: "Cancelled" } : b));
+    flash("Booking cancelled successfully ✅");
+    setConfirmCancel(null);
   };
 
   const filtered = filter === "All" ? bookings : bookings.filter(b => b.status === filter);
@@ -218,7 +199,7 @@ export default function MyBookings() {
             <p>Are you sure you want to cancel your booking for <strong>{confirmCancel.carName}</strong>? This action cannot be undone.</p>
             <div className="mb-modal-actions">
               <button className="mb-modal-cancel" onClick={() => setConfirmCancel(null)}>Keep Booking</button>
-              <button className="mb-modal-confirm" onClick={() => cancelBooking(confirmCancel.id)}>Yes, Cancel</button>
+              <button className="mb-modal-confirm" onClick={() => handleCancelBooking(confirmCancel.id)}>Yes, Cancel</button>
             </div>
           </div>
         </div>

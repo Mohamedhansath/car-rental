@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Sidebar from "./Sidebar";
 import "./Users.css";
+import { getUsers, updateUser, deleteUserFromStore } from "./localData";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -15,30 +15,17 @@ function Users() {
     city: "",
   });
 
-  const fetchUsers = async () => {
-    try {
-      const res = await axios.get("http://localhost:8000/admin/users");
-
-      console.log("DATA:", res.data); // 🔥 DEBUG
-
-      setUsers(Array.isArray(res.data) ? res.data : []);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setUsers([]);
-    }
+  const fetchUsers = () => {
+    setUsers(getUsers());
   };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  const deleteUser = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8000/admin/delete-user/${id}`);
-      fetchUsers();
-    } catch (err) {
-      console.error("Delete error:", err);
-    }
+  const deleteUser = (id) => {
+    deleteUserFromStore(id);
+    fetchUsers();
   };
 
   const handleEdit = (user) => {
@@ -56,14 +43,15 @@ function Users() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleUpdate = async () => {
-    try {
-      await axios.put("http://localhost:8000/admin/update-user", form);
-      setEditUser(null);
-      fetchUsers();
-    } catch (err) {
-      console.error("Update error:", err);
-    }
+  const handleUpdate = () => {
+    updateUser(form.id, {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      city: form.city,
+    });
+    setEditUser(null);
+    fetchUsers();
   };
 
   return (

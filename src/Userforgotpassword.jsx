@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Userforgotpassword.css";
-
-const API_BASE = "http://localhost:8000";
+import { getUserByEmail, updateUser } from "./localData";
 
 function Userforgotpassword() {
   const navigate = useNavigate();
@@ -13,30 +12,24 @@ function Userforgotpassword() {
   const [success,         setSuccess]         = useState("");
   const [loading,         setLoading]         = useState(false);
 
-  const handleReset = async (e) => {
+  const handleReset = (e) => {
     e.preventDefault();
     setError(""); setSuccess("");
     if (newPassword !== confirmPassword) { setError("Passwords do not match"); return; }
     if (newPassword.length < 6) { setError("Password must be at least 6 characters"); return; }
     setLoading(true);
-    try {
-      const response = await fetch(`${API_BASE}/users/forgot-password`, {
-        method:  "PUT",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ email, new_password: newPassword }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setSuccess("Password updated successfully! Redirecting to login...");
-        setTimeout(() => navigate("/userLogin"), 1500);
-      } else {
-        setError(data.detail || "Failed to reset password. Please try again.");
-      }
-    } catch {
-      setError("Unable to connect to server. Please try again.");
-    } finally {
+
+    const existingUser = getUserByEmail(email);
+    if (!existingUser) {
+      setError("No account found with that email.");
       setLoading(false);
+      return;
     }
+
+    updateUser(existingUser.id, { password: newPassword });
+    setSuccess("Password updated successfully! Redirecting to login...");
+    setTimeout(() => navigate("/userLogin"), 1500);
+    setLoading(false);
   };
 
   return (

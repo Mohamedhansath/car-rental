@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
-
-const API = "http://localhost:8000";
+import { getBookingsByUser, updateProfile } from "./localData";
 
 const initials = (name) =>
   name
@@ -25,16 +24,9 @@ export default function Profile() {
     setUser(saved);
     setForm({ name: saved.name || "", phone: saved.phone || "", city: saved.city || "" });
 
-    /* Load bookings count */
     if (saved.id) {
-      fetch(`${API}/api/my-bookings/${saved.id}`)
-        .then(r => r.json())
-        .then(data => {
-          if (Array.isArray(data)) {
-            setBookingsCount(data.filter(b => b.status === "Booked").length);
-          }
-        })
-        .catch(() => setBookingsCount(0));
+      const data = getBookingsByUser(saved.id);
+      setBookingsCount(data.filter((b) => b.status === "Booked" || b.status === "Active").length);
     }
   }, []);
 
@@ -48,32 +40,19 @@ export default function Profile() {
   };
 
   /* ── Save to DB ── */
-  const handleSave = async () => {
+  const handleSave = () => {
     setSaving(true);
-    try {
-      const res = await fetch(`${API}/api/profile`, {
-        method:  "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id:    user.id,
-          name:  form.name,
-          phone: form.phone,
-          city:  form.city,
-        }),
-      });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Update failed");
+    const updatedUser = updateProfile(user.id, {
+      name: form.name,
+      phone: form.phone,
+      city: form.city,
+    });
 
-      /* Sync localStorage with new data */
-      const updatedUser = { ...user, name: form.name, phone: form.phone, city: form.city };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setUser(updatedUser);
-      setEditing(false);
-      flash("Profile updated successfully! ✅");
-    } catch (err) {
-      flash(err.message || "Update failed ❌");
-    }
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    setEditing(false);
+    flash("Profile updated successfully! ✅");
     setSaving(false);
   };
 
