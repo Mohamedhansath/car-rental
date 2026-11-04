@@ -303,12 +303,41 @@ export function ensureDemoData() {
 
 export function getStore() {
   ensureDemoData();
-  const raw = localStorage.getItem(STORAGE_KEY);
-  return JSON.parse(raw);
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (
+      !parsed ||
+      !Array.isArray(parsed.users) ||
+      !Array.isArray(parsed.cars) ||
+      !Array.isArray(parsed.bookings)
+    ) {
+      throw new Error("Invalid local data format");
+    }
+    return parsed;
+  } catch (error) {
+    console.error("DriveEase storage could not be read:", error);
+    const fallback = buildInitialStore();
+    saveStore(fallback);
+    return fallback;
+  }
 }
 
 export function saveStore(store) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  if (
+    !store ||
+    !Array.isArray(store.users) ||
+    !Array.isArray(store.cars) ||
+    !Array.isArray(store.bookings)
+  ) {
+    throw new Error("Invalid DriveEase data. Changes were not saved.");
+  }
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  } catch (error) {
+    console.error("DriveEase storage could not be saved:", error);
+    throw new Error("Unable to save data. Browser storage may be full or disabled.");
+  }
 }
 
 export function getCars() {
@@ -328,7 +357,10 @@ export function getBookingsByUser(userId) {
 }
 
 export function getUserByEmail(email) {
-  return getUsers().find((user) => user.email.toLowerCase() === String(email).toLowerCase());
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+  return getUsers().find((user) =>
+    String(user.email || "").trim().toLowerCase() === normalizedEmail
+  );
 }
 
 export function getCarById(id) {
@@ -418,28 +450,48 @@ export function deleteCar(id) {
 
 export function addBooking(payload) {
   const store = getStore();
-  const car = store.cars.find((item) => item.id === payload.carId);
-  const user = store.users.find((item) => item.id === payload.userId);
+  const carId = Number(payload?.carId);
+  const userId = Number(payload?.userId);
+  const days = Number(payload?.days);
+  const car = store.cars.find((item) => Number(item.id) === carId);
+  const user = store.users.find((item) => Number(item.id) === userId);
+
+  if (!user || user.role === "admin") {
+    throw new Error("A valid customer account is required to book a car.");
+  }
+  if (!car) throw new Error("This car could not be found.");
+  if (!car.available || car.status !== "Available") {
+    throw new Error("This car is currently unavailable.");
+  }
+  if (!Number.isInteger(days) || days < 1 || days > 30) {
+    throw new Error("Booking duration must be between 1 and 30 days.");
+  }
+  if (store.bookings.some((booking) =>
+    Number(booking.carId) === carId &&
+    !["Cancelled", "Completed"].includes(booking.status)
+  )) {
+    throw new Error("This car already has an active booking.");
+  }
 
   const booking = {
     id: Date.now(),
-    userId: payload.userId,
-    carId: payload.carId,
-    carName: car?.name || "",
-    carType: car?.type || "",
-    customer: user?.name || "",
-    phone: user?.phone || "",
-    userEmail: user?.email || "",
-    days: Number(payload.days || 1),
-    amount: Number((car?.price || 0) * (payload.days || 1)),
+    userId,
+    carId,
+    carName: car.name,
+    carType: car.type || "",
+    customer: user.name || "",
+    phone: user.phone || "",
+    userEmail: user.email || "",
+    days,
+    amount: Number(car.price || 0) * days,
     status: "Booked",
     createdAt: new Date().toISOString(),
-    pickup: payload.pickup || "City Center"
+    pickup: String(payload.pickup || "City Center").trim().slice(0, 100)
   };
 
   store.bookings.unshift(booking);
   store.cars = store.cars.map((item) =>
-    item.id === payload.carId
+    Number(item.id) === carId
       ? { ...item, available: false, status: "Rented" }
       : item
   );
@@ -448,20 +500,31 @@ export function addBooking(payload) {
 }
 
 export function updateBookingStatus(id, status) {
+  const allowedStatuses = ["Pending", "Booked", "Active", "Completed", "Cancelled"];
+  if (!allowedStatuses.includes(status)) {
+    throw new Error("Invalid booking status.");
+  }
+
   const store = getStore();
+  const target = store.bookings.find((booking) => Number(booking.id) === Number(id));
+  if (!target) throw new Error("Booking not found.");
+  if (["Cancelled", "Completed"].includes(target.status) && target.status !== status) {
+    throw new Error("A closed booking cannot be reopened. Create a new booking instead.");
+  }
+
   store.bookings = store.bookings.map((booking) =>
-    booking.id === id ? { ...booking, status } : booking
+    Number(booking.id) === Number(id) ? { ...booking, status } : booking
   );
 
-  if (status === "Cancelled" || status === "Completed") {
-    store.cars = store.cars.map((car) => {
-      const hasActiveBooking = store.bookings.some(
-        (booking) => booking.carId === car.id && booking.status !== "Cancelled" && booking.status !== "Completed"
-      );
-      return car.id === store.bookings.find((booking) => booking.id === id)?.carId
-        ? { ...car, available: !hasActiveBooking, status: hasActiveBooking ? car.status : "Available" }
-        : car;
-    });
+  const car = store.cars.find((item) => Number(item.id) === Number(target.carId));
+  if (car) {
+    const hasOpenBooking = store.bookings.some((booking) =>
+      Number(booking.carId) === Number(car.id) &&
+      !["Cancelled", "Completed"].includes(booking.status)
+    );
+    const isMaintenance = car.status === "Maintenance";
+    car.available = !hasOpenBooking && !isMaintenance;
+    car.status = isMaintenance ? "Maintenance" : hasOpenBooking ? "Rented" : "Available";
   }
 
   saveStore(store);
@@ -474,15 +537,23 @@ export function cancelBooking(id) {
 
 export function deleteBooking(id) {
   const store = getStore();
-  const target = store.bookings.find((booking) => booking.id === id);
-  store.bookings = store.bookings.filter((booking) => booking.id !== id);
+  const target = store.bookings.find((booking) => Number(booking.id) === Number(id));
+  store.bookings = store.bookings.filter((booking) => Number(booking.id) !== Number(id));
 
   if (target) {
-    store.cars = store.cars.map((car) =>
-      car.id === target.carId
-        ? { ...car, available: true, status: "Available" }
-        : car
-    );
+    store.cars = store.cars.map((car) => {
+      if (Number(car.id) !== Number(target.carId)) return car;
+      const hasOpenBooking = store.bookings.some((booking) =>
+        Number(booking.carId) === Number(car.id) &&
+        !["Cancelled", "Completed"].includes(booking.status)
+      );
+      const isMaintenance = car.status === "Maintenance";
+      return {
+        ...car,
+        available: !hasOpenBooking && !isMaintenance,
+        status: isMaintenance ? "Maintenance" : hasOpenBooking ? "Rented" : "Available"
+      };
+    });
   }
 
   saveStore(store);
