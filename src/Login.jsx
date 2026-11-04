@@ -5,10 +5,7 @@ import "./Login.css";
 function Login() {
 
   const navigate = useNavigate();
- const back=useNavigate()
- const handleback=()=>{
-  back("/")
- }
+ const handleback=()=> navigate("/")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error,setError] = useState("");
@@ -19,7 +16,8 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if(email === staticEmail && password === staticPassword){
+    if(email.trim().toLowerCase() === staticEmail && password === staticPassword){
+      localStorage.setItem("driveease_admin_session", JSON.stringify({ role: "admin", createdAt: Date.now() }));
       navigate("/dashboard");
     }else{
       setError(" Invalid Email or Password");
@@ -50,7 +48,7 @@ function Login() {
 
         <button type="submit">Login</button>
 
-        <button onClick={handleback}>Back</button>
+        <button type="button" onClick={handleback}>Back</button>
 
       </form>
 
