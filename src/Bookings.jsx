@@ -106,7 +106,7 @@ export default function Bookings() {
         <div className="bk-stats">
           {[
             { label: "Total",     num: counts.all,       key: "All",       color: "#667eea" },
-            { label: "Active",    num: counts.booked,    key: "Booked",    color: "#10b981" },
+            { label: "Booked",    num: counts.booked,    key: "Booked",    color: "#10b981" },
             { label: "Completed", num: counts.completed, key: "Completed", color: "#3b82f6" },
             { label: "Cancelled", num: counts.cancelled, key: "Cancelled", color: "#ef4444" },
           ].map(s => (
