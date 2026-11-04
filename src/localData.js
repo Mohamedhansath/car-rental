@@ -391,7 +391,22 @@ export function updateUser(id, updates) {
 export function deleteUserFromStore(id) {
   const store = getStore();
   store.users = store.users.filter((user) => user.id !== id);
-  store.bookings = store.bookings.filter((booking) => booking.userId !== id);
+  const removedBookings = store.bookings.filter((booking) => Number(booking.userId) === Number(id));
+  store.bookings = store.bookings.filter((booking) => Number(booking.userId) !== Number(id));
+  const affectedCarIds = new Set(removedBookings.map((booking) => Number(booking.carId)));
+  store.cars = store.cars.map((car) => {
+    if (!affectedCarIds.has(Number(car.id))) return car;
+    const hasOpenBooking = store.bookings.some((booking) =>
+      Number(booking.carId) === Number(car.id) &&
+      !["Cancelled", "Completed"].includes(booking.status)
+    );
+    const isMaintenance = car.status === "Maintenance";
+    return {
+      ...car,
+      available: !hasOpenBooking && !isMaintenance,
+      status: isMaintenance ? "Maintenance" : hasOpenBooking ? "Rented" : "Available"
+    };
+  });
   saveStore(store);
   return store.users;
 }
