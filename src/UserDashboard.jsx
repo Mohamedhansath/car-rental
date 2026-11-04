@@ -51,7 +51,15 @@ export default function UserDashboard() {
     if (!car.available || booked[car.id]) { flash("Car is not available"); return; }
 
     setLoading(car.id);
-    addBooking({ userId: user.id, carId: car.id, days: 1 });
+    try {
+      addBooking({ userId: user.id, carId: car.id, days: 1 });
+    } catch (error) {
+      flash(error.message || "Unable to create booking");
+      setLoading(null);
+      loadCars();
+      loadMyBookings(user.id);
+      return;
+    }
 
     setBooked(prev => ({ ...prev, [car.id]: true }));
     setCars(prev => prev.map(c => c.id === car.id ? { ...c, available: false, status: "Rented" } : c));
