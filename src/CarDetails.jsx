@@ -7,7 +7,8 @@ export default function CarDetails() {
   const navigate  = useNavigate();
   const location  = useLocation();
   const params    = new URLSearchParams(location.search);
-  const id        = parseInt(params.get("id"));
+  const parsedId  = Number(params.get("id"));
+  const id        = Number.isSafeInteger(parsedId) && parsedId > 0 ? parsedId : null;
 
   const [car,        setCar]        = useState(null);
   const [booked,     setBooked]     = useState(false);
@@ -47,7 +48,14 @@ export default function CarDetails() {
     if (!car || !car.available) return;
 
     setLoading(true);
-    addBooking({ userId: user.id, carId: car.id, days });
+    try {
+      addBooking({ userId: user.id, carId: car.id, days });
+    } catch (error) {
+      flash(error.message || "Unable to create booking");
+      setLoading(false);
+      setCar(getCarById(car.id));
+      return;
+    }
 
     setBooked(true);
     setCar((prev) => prev ? { ...prev, available: false, status: "Rented" } : prev);
@@ -106,7 +114,7 @@ export default function CarDetails() {
               <div className="cd-features">
                 <div className="cd-feat-title">Features & Amenities</div>
                 <div className="cd-feat-list">
-                  {car.features.map(f => (
+                  {(Array.isArray(car.features) ? car.features : String(car.features).split(",").map(item => item.trim()).filter(Boolean)).map(f => (
                     <span key={f} className="cd-feat-chip">✓ {f}</span>
                   ))}
                 </div>
@@ -163,7 +171,7 @@ export default function CarDetails() {
                   <div className="cd-days-control">
                     <button className="cd-days-btn" onClick={() => setDays(d => Math.max(1, d - 1))}>−</button>
                     <span className="cd-days-num">{days}</span>
-                    <button className="cd-days-btn" onClick={() => setDays(d => d + 1)}>+</button>
+                    <button className="cd-days-btn" onClick={() => setDays(d => Math.min(30, d + 1))}>+</button>
                   </div>
                 </div>
                 <div className="cd-total">
