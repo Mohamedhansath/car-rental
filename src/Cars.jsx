@@ -40,25 +40,32 @@ export default function Cars() {
   /* ── Add car ── */
   const handleAdd = () => {
     if (!form.name.trim()) { flash("Car name is required ❌", "error"); return; }
-    if (!Number.isFinite(Number(form.price)) || Number(form.price) < 0 || !Number.isInteger(Number(form.seats)) || Number(form.seats) < 1 || Number(form.seats) > 20) { flash("Enter a valid price and seat count.", "error"); return; }
+    if (!Number.isFinite(Number(form.price)) || Number(form.price) < 0 || !Number.isInteger(Number(form.seats)) || Number(form.seats) < 1 || Number(form.seats) > 20) {
+      flash("Enter a valid price and seat count.", "error");
+      return;
+    }
     setSaving(true);
-
-    const payload = {
-      ...form,
-      seats:    Number(form.seats),
-      price:    Number(form.price),
-      year:     Number(form.year),
-      reviews:  Number(form.reviews),
-      rating:   Number(form.rating),
-      available: form.status === "Available",
-      features: typeof form.features === "string" ? form.features : form.features.join(","),
-    };
-
-    addCar(payload);
-    fetchCars();
-    setModal(null);
-    flash("Car added successfully ✅");
-    setSaving(false);
+    try {
+      const payload = {
+        ...form,
+        name: form.name.trim(),
+        seats: Number(form.seats),
+        price: Number(form.price),
+        year: Number(form.year),
+        reviews: Number(form.reviews),
+        rating: Number(form.rating),
+        available: form.status === "Available",
+        features: typeof form.features === "string" ? form.features : form.features.join(","),
+      };
+      addCar(payload);
+      fetchCars();
+      setModal(null);
+      flash("Car added successfully ✅");
+    } catch (error) {
+      flash(error.message || "Unable to add car", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   /* ── Edit car ── */
