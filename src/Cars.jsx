@@ -40,6 +40,7 @@ export default function Cars() {
   /* ── Add car ── */
   const handleAdd = () => {
     if (!form.name.trim()) { flash("Car name is required ❌", "error"); return; }
+    if (!Number.isFinite(Number(form.price)) || Number(form.price) < 0 || !Number.isInteger(Number(form.seats)) || Number(form.seats) < 1 || Number(form.seats) > 20) { flash("Enter a valid price and seat count.", "error"); return; }
     setSaving(true);
 
     const payload = {
@@ -76,19 +77,29 @@ export default function Cars() {
       features: Array.isArray(form.features) ? form.features.join(",") : form.features,
     };
 
-    updateCar(form.id, payload);
-    fetchCars();
-    setModal(null);
-    flash("Car updated successfully ✅");
-    setSaving(false);
+    try {
+      updateCar(form.id, payload);
+      fetchCars();
+      setModal(null);
+      flash("Car updated successfully ✅");
+    } catch (error) {
+      flash(error.message || "Unable to update car", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   /* ── Delete car ── */
   const handleDelete = (carId) => {
-    deleteCar(carId);
-    setCars(prev => prev.filter(c => c.id !== carId));
-    setModal(null);
-    flash("Car deleted ✅");
+    try {
+      deleteCar(carId);
+      setCars(getCars());
+      setModal(null);
+      flash("Car deleted ✅");
+    } catch (error) {
+      setModal(null);
+      flash(error.message || "Unable to delete car", "error");
+    }
   };
 
   /* ── Filter ── */
