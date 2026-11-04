@@ -20,7 +20,7 @@ function UserLogin() {
 
     const user = getUserByEmail(email);
 
-    if (!user || user.password !== password) {
+    if (!user || user.role !== "user" || user.password !== password) {
       setError("Invalid email or password");
       setLoading(false);
       return;
