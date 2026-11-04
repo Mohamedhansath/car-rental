@@ -38,24 +38,33 @@ export default function Bookings() {
 
   /* ── Status change ── */
   const handleStatusChange = (bookingId, newStatus) => {
-    updateBookingStatus(bookingId, newStatus);
-    setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: newStatus } : b));
-    flash("Status updated ✅");
+    try {
+      updateBookingStatus(bookingId, newStatus);
+      setBookings(getBookings());
+      flash("Status updated ✅");
+    } catch (error) {
+      flash(error.message || "Unable to update booking", "error");
+      setBookings(getBookings());
+    }
   };
 
   /* ── Delete booking ── */
   const handleDelete = (bookingId) => {
-    deleteBooking(bookingId);
-    setBookings(prev => prev.filter(b => b.id !== bookingId));
-    setModal(null);
-    flash("Booking deleted ✅");
+    try {
+      deleteBooking(bookingId);
+      setBookings(getBookings());
+      setModal(null);
+      flash("Booking deleted ✅");
+    } catch (error) {
+      flash(error.message || "Unable to delete booking", "error");
+    }
   };
 
   /* ── Filter ── */
   const filtered = bookings.filter(b => {
     const matchSearch =
       (b.customer || "").toLowerCase().includes(search.toLowerCase()) ||
-      (b.car       || "").toLowerCase().includes(search.toLowerCase()) ||
+      (b.carName   || b.car || "").toLowerCase().includes(search.toLowerCase()) ||
       String(b.id).includes(search);
     const matchStatus = statusFilter === "All" || b.status === statusFilter;
     return matchSearch && matchStatus;
@@ -119,7 +128,7 @@ export default function Bookings() {
         <div className="bk-filters">
           <div className="bk-search-wrap">
             <span className="bk-search-ico"><i className="fa-solid fa-magnifying-glass"></i></span>
-            <inputpw
+            <input
               className="bk-search"
               placeholder="Search by customer, car, or ID..."
               value={search}
