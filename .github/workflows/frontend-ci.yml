@@ -1,0 +1,27 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - frontend-audit-fixes
+  pull_request:
+    branches:
+      - car_rental
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build production bundle
+        run: npm run build
+      - name: Run ESLint
+        run: npm run lint
