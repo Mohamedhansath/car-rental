@@ -18,19 +18,25 @@ function Userregister() {
     setLoading(true);
     setMessage(null);
 
-    if (!name || !email || !password) {
+    if (!name.trim() || !email.trim() || !password) {
       setMessage({ type: "error", text: "Please fill in the required fields." });
       setLoading(false);
       return;
     }
 
-    if (getUserByEmail(email)) {
+    if (password.length < 6) {
+      setMessage({ type: "error", text: "Password must be at least 6 characters." });
+      setLoading(false);
+      return;
+    }
+
+    if (getUserByEmail(email.trim())) {
       setMessage({ type: "error", text: "This email is already registered." });
       setLoading(false);
       return;
     }
 
-    addUser({ name, email, password, phone, city, role: "user" });
+    addUser({ name: name.trim(), email: email.trim().toLowerCase(), password, phone: phone.trim(), city: city.trim(), role: "user" });
     setMessage({ type: "success", text: "Registration successful — redirecting to login..." });
     setTimeout(() => navigate("/userLogin"), 1500);
     setLoading(false);
