@@ -416,6 +416,15 @@ export function addCar(car) {
 
 export function updateCar(id, updates) {
   const store = getStore();
+  const targetCar = store.cars.find((car) => Number(car.id) === Number(id));
+  if (!targetCar) throw new Error("Car not found.");
+  const hasOpenBooking = store.bookings.some((booking) =>
+    Number(booking.carId) === Number(id) &&
+    !["Cancelled", "Completed"].includes(booking.status)
+  );
+  if (hasOpenBooking && updates.status === "Available") {
+    throw new Error("This car has an active booking and cannot be marked available.");
+  }
   store.cars = store.cars.map((car) =>
     car.id === id
       ? {
@@ -442,6 +451,13 @@ export function updateCar(id, updates) {
 
 export function deleteCar(id) {
   const store = getStore();
+  const hasOpenBooking = store.bookings.some((booking) =>
+    Number(booking.carId) === Number(id) &&
+    !["Cancelled", "Completed"].includes(booking.status)
+  );
+  if (hasOpenBooking) {
+    throw new Error("Cancel or complete this car's active booking before deleting it.");
+  }
   store.cars = store.cars.filter((car) => car.id !== id);
   store.bookings = store.bookings.filter((booking) => booking.carId !== id);
   saveStore(store);
