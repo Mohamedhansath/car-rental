@@ -40,7 +40,7 @@ export default function Dashboard() {
       setRecentBookings(sortedBookings.map((b) => ({
         id: b.id,
         customer: b.customer || b.carName || "Guest",
-        car: b.carName || "Car",
+        car: b.carName || b.car || "Car",
         date: b.createdAt || b.date || "—",
         amount: "₹" + Number(b.amount || b.price || 0).toLocaleString("en-IN"),
         status: b.status || "Pending",
@@ -52,10 +52,10 @@ export default function Dashboard() {
       const availableCars = carsList.filter((c) => c.status === "Available").length;
 
       setStats([
-        { label: "Total Cars", value: totalCars.toString(), change: "+4 this month", color: "#f97316" },
-        { label: "Active Bookings", value: activeBookings.toString(), change: "+8 today", color: "#06b6d4" },
-        { label: "Revenue", value: `₹${(revenue / 100000).toFixed(1)}L`, change: "+12% vs last month", color: "#10b981" },
-        { label: "Available Cars", value: availableCars.toString(), change: `${((availableCars / totalCars) * 100).toFixed(0)}% fleet free`, color: "#8b5cf6" },
+        { label: "Total Cars", value: totalCars.toString(), change: "Fleet total", color: "#f97316" },
+        { label: "Active Bookings", value: activeBookings.toString(), change: "Current total", color: "#06b6d4" },
+        { label: "Revenue", value: `₹${(revenue / 100000).toFixed(1)}L`, change: "Based on saved bookings", color: "#10b981" },
+        { label: "Available Cars", value: availableCars.toString(), change: `${(totalCars ? (availableCars / totalCars) * 100 : 0).toFixed(0)}% fleet free`, color: "#8b5cf6" },
       ]);
 
       setLoading(false);
