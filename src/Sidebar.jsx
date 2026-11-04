@@ -64,6 +64,7 @@ function Sidebar() {
           <hr />
           <button 
             onClick={() => { 
+              localStorage.removeItem("driveease_admin_session");
               navigate("/"); 
               setMobileMenuOpen(false); 
             }} 
