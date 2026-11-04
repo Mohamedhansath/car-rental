@@ -26,7 +26,8 @@ function UserLogin() {
       return;
     }
 
-    localStorage.setItem("user", JSON.stringify(user));
+    const { password: _storedPassword, ...safeUser } = user;
+    localStorage.setItem("user", JSON.stringify(safeUser));
     navigate("/userDashboard");
     setLoading(false);
   };
