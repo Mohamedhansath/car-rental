@@ -190,7 +190,7 @@ export default function Bookings() {
                           <div className="bk-car-cell">
                             <span className="bk-car-ico"><i className="fa-solid fa-car-side"></i></span>
                             <div>
-                              <div className="bk-car-name">{b.car || "—"}</div>
+                              <div className="bk-car-name">{b.carName || b.car || "—"}</div>
                               <div className="bk-route">{b.carType || ""}</div>
                             </div>
                           </div>
