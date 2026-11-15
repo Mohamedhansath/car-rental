@@ -684,3 +684,15 @@
     font-size: 11px;
   }
 }
+
+/* Cars route responsive width fix */
+.cars-root { width: 100%; max-width: 100%; min-width: 0; overflow-x: clip; }
+.c-main { width: calc(100% - 260px); max-width: calc(100% - 260px); min-width: 0; margin-left: 260px; box-sizing: border-box; }
+.c-table-card { width: 100%; max-width: 100%; overflow-x: auto; }
+.c-table { min-width: 720px; }
+.c-modal { width: min(500px, 100%); max-width: 100%; max-height: calc(100dvh - 32px); overflow-y: auto; }
+@media (max-width: 768px) {
+  .c-main { width: 100%; max-width: 100%; margin-left: 0; padding: 70px 14px 18px; }
+  .c-page-header, .c-filter-row { flex-wrap: wrap; min-width: 0; }
+  .c-table-card { overflow-x: auto; }
+}
