@@ -1092,3 +1092,13 @@
   .bk-header, .bk-filters, .bk-frow { flex-wrap: wrap; min-width: 0; }
   .bk-table-card { overflow-x: auto; }
 }
+
+
+/* Final route sizing: sidebar is already a flex sibling, so do not add its width twice. */
+.bk-root { display: flex; width: 100%; max-width: 100%; min-width: 0; }
+.bk-main { flex: 1 1 0%; width: auto; max-width: none; min-width: 0; margin-left: 0; box-sizing: border-box; }
+.bk-main > *, .bk-header > *, .bk-filters > *, .bk-frow > * { min-width: 0; }
+@media (max-width: 768px) {
+  .bk-root { display: block; }
+  .bk-main { width: 100%; max-width: 100%; margin-left: 0; padding-left: 14px; padding-right: 14px; }
+}
