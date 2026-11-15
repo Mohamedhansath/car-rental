@@ -447,3 +447,18 @@ padding:25px;
 
 
 
+
+
+/* Shared viewport guard for all car-rental routes */
+html, body, #root { width: 100%; max-width: 100%; overflow-x: clip; }
+.dashboard-layout, .dashboard-content, .cars-root, .bk-root { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+.dashboard-layout { min-height: 100vh; height: auto; }
+.main, .c-main, .bk-main { min-width: 0; box-sizing: border-box; }
+.c-table-card, .bk-table-card { max-width: 100%; overflow-x: auto; }
+.c-table, .bk-table { min-width: 720px; }
+.c-overlay, .bk-overlay { z-index: 1100; padding: 16px; overflow-y: auto; box-sizing: border-box; }
+.c-modal, .bk-modal { max-width: min(95vw, 650px); max-height: calc(100dvh - 32px); overflow-y: auto; box-sizing: border-box; }
+@media (max-width: 768px) {
+  .dashboard-layout, .dashboard-content { flex-direction: column; }
+  .main, .main.expanded, .c-main, .bk-main { width: 100% !important; max-width: 100% !important; margin-left: 0 !important; padding-left: 14px; padding-right: 14px; }
+}
