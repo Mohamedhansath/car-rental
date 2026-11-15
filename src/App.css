@@ -462,3 +462,13 @@ html, body, #root { width: 100%; max-width: 100%; overflow-x: clip; }
   .dashboard-layout, .dashboard-content { flex-direction: column; }
   .main, .main.expanded, .c-main, .bk-main { width: 100% !important; max-width: 100% !important; margin-left: 0 !important; padding-left: 14px; padding-right: 14px; }
 }
+
+
+/* Global route overflow protection */
+html, body, #root { width: 100%; max-width: 100%; overflow-x: clip; }
+.dashboard-layout, .dashboard-content, .cars-root, .bk-root { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.dashboard-content > *, .main, .c-main, .bk-main { min-width: 0; box-sizing: border-box; }
+@media (max-width: 768px) {
+  .dashboard-layout { width: 100%; max-width: 100%; }
+  .main, .main.expanded { width: 100% !important; max-width: 100% !important; margin-left: 0 !important; }
+}
