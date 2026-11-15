@@ -856,3 +856,11 @@ td {
     font-size: 13px;
   }
 }
+
+/* Fixed-sidebar layout: reserve sidebar width instead of adding to 100% */
+.dashboard-content { width: 100%; max-width: 100%; min-width: 0; overflow-x: clip; }
+.main { flex: 0 1 calc(100% - 250px); width: calc(100% - 250px); max-width: calc(100% - 250px); min-width: 0; box-sizing: border-box; }
+.main .content, .main .topbar, .main .page-header { min-width: 0; max-width: 100%; }
+@media (max-width: 768px) {
+  .main, .main.expanded { flex: 1 1 100%; width: 100%; max-width: 100%; margin-left: 0 !important; }
+}
